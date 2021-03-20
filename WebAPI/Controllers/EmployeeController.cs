@@ -100,5 +100,31 @@ namespace WebAPI.Controllers
                 return $"Failed to update. {ex.Message}";
             }
         }
+
+        public string Delete(int id)
+        {
+            try
+            {
+                DataTable table = new DataTable();
+
+                string query = @"
+                           delete from dbo.Employees 
+                               where EmployeeID = " + id;
+                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString))
+                using (var cmd = new SqlCommand(query, con))
+                using (var da = new SqlDataAdapter(cmd))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    da.Fill(table);
+                }
+
+                return "Deleted successfully";
+            }
+            catch (Exception ex)
+            {
+
+                return $"Failed to delete. {ex.Message}";
+            }
+        }
     }
 }
